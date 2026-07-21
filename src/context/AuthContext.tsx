@@ -32,21 +32,20 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
-  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
+  const [loading, setLoading] = useState<boolean>(() => !!localStorage.getItem('token'));
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
-    if (!storedToken) {
-      setLoading(false);
-      return;
-    }
+    if (!storedToken) return;
 
+    let isMounted = true;
     fetch('/api/auth/me', {
       headers: { Authorization: `Bearer ${storedToken}` },
     })
       .then((res) => res.json())
       .then((data) => {
+        if (!isMounted) return;
         if (data.user) {
           setUser(data.user);
         } else {
@@ -55,10 +54,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       })
       .catch(() => {
+        if (!isMounted) return;
         localStorage.removeItem('token');
         setToken(null);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -100,6 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) throw new Error('useAuth must be used within AuthProvider');

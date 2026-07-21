@@ -1,20 +1,29 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+echo "==> Updating Ubuntu package list & installing dependencies..."
 sudo apt update
-sudo apt install -y nginx postgresql postgresql-contrib build-essential
+sudo apt install -y nginx build-essential curl git
+
+echo "==> Installing Node.js 22 LTS (if not present)..."
+if ! command -v node &> /dev/null; then
+  curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+  sudo apt install -y nodejs
+fi
+
+echo "==> Installing PM2 globally..."
 sudo npm install -g pm2
 
-sudo -u postgres psql -c "CREATE USER iias WITH PASSWORD 'iiaspass';"
-sudo -u postgres psql -c "CREATE DATABASE iiasdb OWNER iias;"
-
-sudo tee /etc/nginx/conf.d/iias.conf > /dev/null <<'EOF'
+echo "==> Configuring Nginx site..."
+sudo tee /etc/nginx/sites-available/iias.conf > /dev/null <<'EOF'
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
     server_name _;
 
-    location /api {
+    client_max_body_size 20M;
+
+    location / {
         proxy_pass http://127.0.0.1:5000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -24,13 +33,11 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
-
-    location / {
-        root /home/iias/NewSite/dist;
-        try_files $uri $uri/ /index.html;
-    }
 }
 EOF
 
+sudo ln -sf /etc/nginx/sites-available/iias.conf /etc/nginx/sites-enabled/default
 sudo nginx -t
 sudo systemctl restart nginx
+
+echo "==> Setup Complete! You can now configure GitHub Actions runner."

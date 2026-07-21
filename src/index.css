@@ -1,60 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cinzel+Decorative:wght@700&family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap');
+
 :root {
-  --text-heading: #14213d;
-  --text-muted: #5f6b7a;
-  --background: #f8f3ea;
-  --surface: #fffdf8;
-  --border: #e8dccf;
-  --accent: #8b4b1d;
-  --accent-soft: #f2e0cc;
-  --shadow: 0 18px 45px rgba(20, 33, 61, 0.12);
-  font-family: Inter, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: var(--text-heading);
-  background: var(--background);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --color-burgundy-dark: #3F101A;
+  --color-burgundy: #601725;
+  --color-burgundy-light: #7E2234;
+  --color-gold: #C5A059;
+  --color-gold-light: #E6C887;
+  --color-gold-dark: #9A7733;
+  --color-sandstone: #FAF8F5;
+  --color-sandstone-card: #F4EFE6;
+  --color-sandstone-border: #E5DAC8;
+  --color-charcoal: #1E2229;
+  --color-text-body: #333842;
+  --color-text-muted: #626975;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --font-heading: 'Merriweather', Georgia, serif;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
   scroll-behavior: smooth;
+  font-family: var(--font-body);
+  color: var(--color-text-body);
+  background-color: #ffffff;
+  line-height: 1.6;
 }
 
 body {
-  margin: 0;
-  background: linear-gradient(135deg, #f9f4ea 0%, #f2e9db 100%);
-}
-
-#root {
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
-img {
-  display: block;
+a {
+  color: var(--color-burgundy);
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
-h1,
-h2,
-h3,
-p {
-  margin-top: 0;
+a:hover {
+  color: var(--color-gold-dark);
 }
 
-h1 {
-  font-size: clamp(2.2rem, 4vw, 3.4rem);
-  line-height: 1.1;
-}
-
-h2 {
-  font-size: clamp(1.6rem, 2.4vw, 2.2rem);
-}
-
-h3 {
-  font-size: 1.1rem;
+button, input, select, textarea {
+  font-family: inherit;
 }
