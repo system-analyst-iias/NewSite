@@ -1,75 +1,92 @@
-# React + TypeScript + Vite
+# IIAS Institutional Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a React + TypeScript website for an academic institution, with a role-based authentication experience for employees and research fellows.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Modern landing page for the institution
+- Authentication flow for users and administrators
+- Role-based registration and dashboard experience
+- Local development server and production build support
 
-## React Compiler
+## Requirements
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Before you start, make sure you have installed:
 
-## Expanding the ESLint configuration
+- Node.js 18 or newer
+- npm
+- Optional: PostgreSQL if you want to switch from the built-in local fallback storage
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Quick start
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. Clone the repository
+2. Install dependencies
+3. Start the app
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run build
+node server/server.js
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The backend will run on port 5000.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Environment variables
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Copy the example environment file and update values if needed:
 
+```bash
+cp .env.example .env
 ```
+
+Example values:
+
+```env
+DATABASE_URL=
+JWT_SECRET=change-this-secret
+PORT=5000
+DB_MODE=json
+JSON_STORE_PATH=./server/data/users.json
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=change-me-please
+```
+
+## Local development
+
+Run the frontend build and backend server:
+
+```bash
+npm run build
+node server/server.js
+```
+
+Health check:
+
+```bash
+curl http://127.0.0.1:5000/health
+```
+
+You should receive:
+
+```json
+{"status":"ok"}
+```
+
+## Production build
+
+```bash
+npm run build
+```
+
+## Notes
+
+- The current setup includes a local JSON fallback so the app can run even without PostgreSQL installed.
+- If you want to connect a real PostgreSQL database, set a valid `DATABASE_URL` and use `DB_MODE=postgres`.
+
+## Project structure
+
+- `src/` - React frontend pages and styles
+- `server/` - Express backend and auth logic
+- `public/` - static assets
+- `dist/` - production build output
+

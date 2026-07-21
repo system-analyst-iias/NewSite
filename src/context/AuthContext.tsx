@@ -67,8 +67,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     });
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.message || 'Login failed');
+    if (!data.token || !data.user) throw new Error('Login response was incomplete');
     localStorage.setItem('token', data.token);
     setToken(data.token);
     setUser(data.user);
@@ -80,8 +81,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.message || 'Signup failed');
+    if (!data.token || !data.user) throw new Error('Signup response was incomplete');
     localStorage.setItem('token', data.token);
     setToken(data.token);
     setUser(data.user);

@@ -61,8 +61,20 @@ const ensureAdminUser = async () => {
     return;
   }
 
-  const result = await query('SELECT id FROM users WHERE email = $1', [adminEmail]);
+  const result = await query('SELECT id, password_hash FROM users WHERE email = $1', [adminEmail]);
   if (result.rowCount > 0) {
+    const existingUser = result.rows[0];
+    const passwordMatches = existingUser?.password_hash && (await bcrypt.compare(adminPassword, existingUser.password_hash));
+
+    if (passwordMatches) {
+      return;
+    }
+
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
+    await query(
+      `UPDATE users SET password_hash = $1, role = $2, department = $3, name = $4 WHERE email = $5`,
+      [hashedPassword, 'admin', 'Administration', 'Administrator', adminEmail],
+    );
     return;
   }
 
