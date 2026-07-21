@@ -46,8 +46,13 @@ function App() {
       </header>
 
       <main id="home">
-        <section className="hero">
-          <div className="hero-copy">
+        <section
+          className="hero"
+          style={{
+            backgroundImage: `linear-gradient(90deg, rgba(20, 33, 61, 0.85) 0%, rgba(20, 33, 61, 0.45) 55%, rgba(20, 33, 61, 0.2) 100%), url(${heroImage})`,
+          }}
+        >
+          <div className="hero-content">
             <p className="eyebrow">A centre of advanced learning and intellectual inquiry</p>
             <h1>Shaping ideas that endure.</h1>
             <p className="hero-text">
@@ -66,10 +71,6 @@ function App() {
                 <li key={item}>{item}</li>
               ))}
             </ul>
-          </div>
-
-          <div className="hero-media">
-            <img src={heroImage} alt="The institute campus exterior" />
           </div>
         </section>
 
