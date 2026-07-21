@@ -242,6 +242,72 @@
   margin-top: 16px;
 }
 
+.auth-shell,
+.dashboard-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.auth-card,
+.dashboard-card {
+  width: min(560px, 100%);
+  background: rgba(255, 253, 248, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.auth-form input,
+.auth-form select,
+.auth-form button,
+.submit-btn {
+  font: inherit;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.mode-toggle button {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: white;
+  cursor: pointer;
+}
+
+.mode-toggle .active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.submit-btn {
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+}
+
+.error {
+  color: #b42318;
+  margin: 0;
+}
+
 @media (max-width: 900px) {
   .hero,
   .section-split,

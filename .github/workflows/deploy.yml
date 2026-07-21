@@ -1,4 +1,4 @@
-name: Deploy Vite App
+name: Deploy Full-Stack App
 on:
   push:
     branches:
@@ -7,19 +7,31 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    
+
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-        
+          cache: npm
+
       - run: npm ci
-      
+
       - run: npm run build
 
-      - run: rm -rf /var/www/html/*
+      - name: Install PM2
+        run: npm install -g pm2
 
-      - run: cp -r dist/* /var/www/html/
+      - name: Start or restart backend
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PORT: 5000
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        run: |
+          pm2 delete iias-portal || true
+          pm2 start server/server.js --name iias-portal --env-file .env || true
+          pm2 save || true
 
